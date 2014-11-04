@@ -67,7 +67,7 @@ class contrail::vrouter (
   # Setting up network interfaces
   ##
   exec { "/sbin/ifdown ${vrouter_physical_interface}":
-    unless => "/bin/grep 'iface ${vrouter_interface}' /etc/network/interfaces",
+    unless => "/bin/grep 'iface ${vrouter_physical_interface} inet dhcp' /etc/network/interfaces",
   } ->
   network_config { $vrouter_physical_interface:
     ensure  => present,
