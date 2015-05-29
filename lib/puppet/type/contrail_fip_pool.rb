@@ -47,6 +47,19 @@ If you use neutron apis, the floating IP pool will be shared with all tenants.
     end
   end
 
+  newparam(:admin_user) do
+    desc 'admin user to create fip as'
+    defaultto 'admin'
+  end
+
+  newparam(:admin_password) do
+    desc 'password for admin user'
+  end
+
+  newparam(:admin_tenant) do
+    desc 'admin tenant name'
+  end
+
   newproperty(:tenants, :array_matching => :all) do
     desc 'An array of project fqnames which will have access to this fip pool'
     def insync?(is)
