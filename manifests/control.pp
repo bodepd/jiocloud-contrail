@@ -9,6 +9,7 @@ class contrail::control (
   $log_level       = 'SYS_INFO',
   $log_file_size   = 10737418240,
   $log_local       = 1,
+  $enable_dns      = true,
 ) {
 
   package {'contrail-control':
@@ -16,23 +17,25 @@ class contrail::control (
   }
 
 
-  package {'contrail-dns':
-    ensure => $package_ensure,
-  }
-  ##
-  # DNS configuration
-  ##
+  if $enable_dns {
+    package {'contrail-dns':
+      ensure => $package_ensure,
+    }
+    ##
+    # DNS configuration
+    ##
 
-  file { '/etc/contrail/dns.conf' :
-    ensure  => present,
-    content => template("${module_name}/dns.conf.erb"),
-  }
+    file { '/etc/contrail/dns.conf' :
+      ensure  => present,
+      content => template("${module_name}/dns.conf.erb"),
+    }
 
-  service {'contrail-dns':
-    ensure    => running,
-    enable    => true,
-    subscribe => File['/etc/contrail/dns.conf'],
-    require   => Package['contrail-dns']
+    service {'contrail-dns':
+      ensure    => running,
+      enable    => true,
+      subscribe => File['/etc/contrail/dns.conf'],
+      require   => Package['contrail-dns']
+    }
   }
 
   ##
